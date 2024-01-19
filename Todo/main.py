@@ -56,4 +56,16 @@ async def post_list(
     return posted_list
 
 
+@router.delete("/list/{list_id}", response_model=ToDoOut)
+async def delete_lisr_by_id(list_id: int, db: Session = Depends(get_db)):
+    deleted_list = await service.delete_list_by_id(db, list_id)
+    return deleted_list
+
+
+@router.delete("/task/{task_id}", response_model=TaskOut)
+async def delete_lisr_by_id(task_id: int, db: Session = Depends(get_db)):
+    deleted_task = await service.delete_task_by_id(db, task_id)
+    return deleted_task
+
+
 app.include_router(router)

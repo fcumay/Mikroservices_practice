@@ -51,3 +51,17 @@ async def get_tasks(session: Session):
 async def get_task_by_id(session: Session, task_id: int):
     task = session.query(Task).get(task_id)
     return task
+
+
+async def delete_list_by_id(session: Session, list_id: int):
+    deleted_list = session.query(ToDoList).get(list_id)
+    session.delete(deleted_list)
+    session.commit()
+    return deleted_list
+
+
+async def delete_task_by_id(session: Session, task_id: int):
+    deleted_task = session.query(Task).get(task_id)
+    session.delete(deleted_task)
+    session.commit()
+    return deleted_task

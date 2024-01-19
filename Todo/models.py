@@ -23,8 +23,10 @@ class Task(Base):
     todo_list = relationship('ToDoList', back_populates='tasks')
 
 
+
 class ToDoList(Base):
     __tablename__ = 'task_lists'
     id = Column(Integer, primary_key=True)
     name = Column(String, nullable=False, unique=True)
-    tasks = relationship('Task', back_populates='todo_list', lazy=True)
+    tasks = relationship('Task', back_populates='todo_list', cascade='all, delete-orphan')
+
