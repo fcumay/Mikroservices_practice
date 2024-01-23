@@ -1,5 +1,5 @@
 from database import Base
-from sqlalchemy import Column, Integer, String, DateTime, Boolean, Enum, ForeignKey
+from sqlalchemy import Column, Integer, String, DateTime, Boolean, Enum, ForeignKey, Table
 from datetime import datetime
 from sqlalchemy.orm import relationship
 import enum
@@ -23,10 +23,18 @@ class Task(Base):
     todo_list = relationship('ToDoList', back_populates='tasks')
 
 
-
 class ToDoList(Base):
     __tablename__ = 'task_lists'
     id = Column(Integer, primary_key=True)
     name = Column(String, nullable=False, unique=True)
+    user_id = Column(Integer, ForeignKey('users.id'))
+    user = relationship('User', back_populates='todo_lists')
     tasks = relationship('Task', back_populates='todo_list', cascade='all, delete-orphan')
 
+
+class User(Base):
+    __tablename__ = 'users'
+    id = Column(Integer, primary_key=True)
+    username = Column(String, unique=True, index=True)
+    hashed_password = Column(String)
+    todo_lists = relationship('ToDoList', back_populates='user',cascade='all, delete-orphan')

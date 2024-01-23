@@ -29,3 +29,18 @@ class ToDoOut(BaseModel):
     id: int
     name: str
     tasks: Optional[List[TaskOut]] = None
+
+
+class UserIn(BaseModel):
+    username: str
+    password: str
+
+
+class UserOut(BaseModel):
+    id: int
+    username: str
+
+
+class Token(BaseModel):
+    access_token: str
+    token_type: str

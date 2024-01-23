@@ -1,13 +1,17 @@
-from fastapi import FastAPI, APIRouter, Depends
+import service_auth
+from fastapi import FastAPI, APIRouter
+
 import models
+
+from schema import Token, UserIn, UserOut
 from database import engine
-from typing import Mapping, Any, List
+from typing import List
 from sqlalchemy.orm import Session
 
 import service
 from database import get_db
-from dependencies import valid_task_id
 from schema import TaskOut, ToDoOut, ToDoIn, TaskIn
+from fastapi import Depends
 
 app = FastAPI()
 router = APIRouter()
@@ -66,6 +70,32 @@ async def delete_lisr_by_id(list_id: int, db: Session = Depends(get_db)):
 async def delete_lisr_by_id(task_id: int, db: Session = Depends(get_db)):
     deleted_task = await service.delete_task_by_id(db, task_id)
     return deleted_task
+
+
+@router.post("/register", response_model=Token)
+async def register_user(
+        data: UserIn,
+        db: Session = Depends(get_db)
+):
+    token = service_auth.create_user(data, db)
+    return token
+
+
+@router.post("/token", response_model=Token)
+async def login_for_access_token(
+        data: UserIn,
+        db: Session = Depends(get_db)):
+    token = service_auth.authenticate_user(db, data.username, data.password)
+    return token
+
+
+@router.get("/users/me/", response_model=UserOut)
+async def read_users_me(
+        token: str,
+        db: Session = Depends(get_db)
+):
+    current_user = service_auth.get_current_user(token, db)
+    return current_user
 
 
 app.include_router(router)
