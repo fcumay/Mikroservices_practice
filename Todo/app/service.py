@@ -1,8 +1,8 @@
 from sqlalchemy.orm import Session
 from datetime import datetime
 
-from schema import TaskOut, ToDoOut, TaskIn
-from models import Task, ToDoList
+from .schema import ToDoOut, TaskIn
+from .models import Task, ToDoList
 
 
 async def insert_task(session: Session, task_data: TaskIn):

@@ -1,7 +1,7 @@
 from pydantic import BaseModel
 from datetime import datetime
 from typing import List, Optional
-from models import Priority
+from .models import Priority
 
 
 class TaskIn(BaseModel):
@@ -37,7 +37,7 @@ class UserIn(BaseModel):
 
 
 class UserOut(BaseModel):
-    id: int
+    id: int | None = None
     username: str
 
 
